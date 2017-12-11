@@ -37,6 +37,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+
+
+    'captcha',
+        'registration',
+            'django_google_maps',
+                'oauth2_provider',
+                        
+                    'social_django', 
+                         'debug_toolbar',
+                              'django_otp',
+                                       'django_otp.plugins.otp_static',
+                                                    'django_otp.plugins.otp_totp',
+                                                                     'two_factor',
+
 ]
 
 MIDDLEWARE = [
@@ -47,14 +63,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+'social_django.middleware.SocialAuthExceptionMiddleware',
+         'debug_toolbar.middleware.DebugToolbarMiddleware',
+                  'django.contrib.auth.middleware.AuthenticationMiddleware',
+                               'django_otp.middleware.OTPMiddleware'
+
+    
+    
+    ]
 
 ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,13 +85,32 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
+            'social_django.context_processors.backends',  # <--
+                                            'social_django.context_processors.login_redirect',
+
+                
+                ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+RECAPTCHA_PUBLIC_KEY='6Lfn0jsUAAAAABoDrjvHv_LxvqvZWjUesyTYx30_'
+RECAPTCHA_PRIVATE_KEY='6Lfn0jsUAAAAAADxFTcVm9uzLngaFjFwJh5jEXyT'
+#WSGI_APPLICATION = 'djangoboard.wsgi.application'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.yahoo.com'
+EMAIL_HOST_USER = 'myname@yahoo.com'
+EMAIL_HOST_PASSWORD = 'mypassword'
+EMAIL_PORT = 587
+ACCOUNT_ACTIVATION_DAYS=2
+GOOGLE_MAPS_API_KEY='AIzaSyDNnOQ_4IsxjlyR4mYuRkl6H3WOUNuJ_eg'
+SOCIAL_AUTH_FACEBOOK_KEY='544177532592299'
+SOCIAL_AUTH_FACEBOOK_SECRET='78c910fcb5ca049f0c258d973f0304ee'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='68940993973-34vg0uufitic6rd3sgj5m53udreipvh2.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='YKszjRXAhD4vC1DlYgnwOE1D'
+GOOGLE_ANALYTICS_MODEL = True
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -118,3 +160,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+            os.path.join(BASE_DIR, 'static'),
+            ]
+NOCAPTCHA = True
+#LOGOUT_REDIRECT_URL = 'home'
+#LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'two_factor:login'
+LOGIN_REDIRECT_URL = 'two_factor:profile'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
